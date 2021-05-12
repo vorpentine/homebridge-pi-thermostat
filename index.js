@@ -3,9 +3,14 @@ const gpio = process.platform === 'linux' ? require('rpi-gpio') : {
   setup: () => {},
   write: () => {}
 };
-const dhtSensor = process.platform === 'linux' ? require('node-dht-sensor') : {
-  read: (type, pin, fn) => { fn(null, 22, 50); }
-};
+
+//const dhtSensor = process.platform === 'linux' ? require('node-dht-sensor') : {
+//  read: (type, pin, fn) => { fn(null, 22, 50); }
+//};
+
+const bmp180 = require('bmp180-sensor')
+
+//https://raspberrypi.stackexchange.com/questions/12966/what-is-the-difference-between-board-and-bcm-for-gpio-pin-numbering
 gpio.setMode(gpio.MODE_BCM);
 
 let Service, Characteristic, HeatingCoolingStateToRelayPin;
@@ -27,7 +32,7 @@ class Thermostat {
     this.fanRelayPin = config.fanRelayPin || 26;
     this.heatRelayPin = config.heatRelayPin || 21;
     this.coolRelayPin = config.coolRelayPin || 20;
-    this.dhtSensorType = config.dhtSensorType || 22;
+    //this.dhtSensorType = config.dhtSensorType || 22;
     this.temperatureSensorPin = config.temperatureSensorPin || 4;
     this.minimumOnOffTime = config.minimumOnOffTime || 120000; // In milliseconds
     this.blowerTurnOffTime = config.blowerTurnOffTime || 80000; // In milliseconds
@@ -182,6 +187,19 @@ class Thermostat {
   }
 
   readTemperatureFromSensor() {
+	const sensor = await bmp180({
+		address: 0x77,
+		mode: 1,
+	})
+	const data = await sensor.read()
+	//console.log(data)
+	//{ pressure: 100601.21886064654, temperature: 20.2 }
+	this.currentTemperature = data['temperature'];
+        //this.currentRelativeHumidity = humidity;
+        this.thermostatService.setCharacteristic(Characteristic.CurrentTemperature, this.currentTemperature);
+        //this.thermostatService.setCharacteristic(Characteristic.CurrentRelativeHumidity, this.currentRelativeHumidity);	
+	await sensor.close()
+/*  
     dhtSensor.read(this.dhtSensorType, this.temperatureSensorPin, (err, temperature, humidity) => {
       if (!err) {
         this.currentTemperature = temperature;
@@ -192,6 +210,7 @@ class Thermostat {
         this.log('ERROR Getting temperature');
       }
     });
+*/
   }
 
   getServices() {
