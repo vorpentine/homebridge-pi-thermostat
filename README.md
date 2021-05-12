@@ -23,7 +23,8 @@ cd bcm2835-1.52
 ```
 * Install homebridge and this plugin
 ```sh
-sudo npm install -g --unsafe-perm homebridge homebridge-pi-thermostat
+sudo npm install -g --unsafe-perm homebridge
+sudo npm install -g vorpentine/homebridge-pi-thermostat-bmp180#master
 ```
 * Add the accessory config to your homebridge config file located at this path `~/.homebridge/config.json`.
 ```json
