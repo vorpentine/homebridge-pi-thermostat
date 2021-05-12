@@ -8,17 +8,10 @@ This is a [homebridge](https://github.com/nfarina/homebridge) plugin to make a R
 curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
 sudo apt-get install -y nodejs libavahi-compat-libdnssd-dev
 ```
-* Install [BCM2835](http://www.airspayce.com/mikem/bcm2835/) for temperature sensor to work
-```sh
-wget http://www.airspayce.com/mikem/bcm2835/bcm2835-1.52.tar.gz
-tar zxvf bcm2835-1.52.tar.gz
-cd bcm2835-1.52
-./configure && make && sudo make check && sudo make install
-```
 * Install homebridge and this plugin
 ```sh
 sudo npm install -g --unsafe-perm homebridge
-sudo npm install -g vorpentine/homebridge-pi-thermostat-bmp180#master
+sudo npm install -g --unsafe-perm vorpentine/homebridge-pi-thermostat-bmp180#master
 ```
 * Add the accessory config to your homebridge config file located at this path `~/.homebridge/config.json`.
 ```json
@@ -60,14 +53,6 @@ You can change the pin to turn on and off the relay switch for the Fan, Heat and
 "fanRelayPin": 26,
 "heatRelayPin": 21,
 "coolRelayPin": 20,
-```
-
-### Temperature Sensor Pin
-
-You also can change the pin for the DHT22 temperature sensor.
-
-```json
-"temperatureSensorPin": 4,
 ```
 
 ### Timing
