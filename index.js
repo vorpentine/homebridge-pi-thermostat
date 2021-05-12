@@ -191,14 +191,14 @@ class Thermostat {
 		address: 0x77,
 		mode: 1,
 	})
-	const data = await sensor.read()
+	const data = sensor.read()
 	//console.log(data)
 	//{ pressure: 100601.21886064654, temperature: 20.2 }
 	this.currentTemperature = data['temperature'];
         //this.currentRelativeHumidity = humidity;
         this.thermostatService.setCharacteristic(Characteristic.CurrentTemperature, this.currentTemperature);
         //this.thermostatService.setCharacteristic(Characteristic.CurrentRelativeHumidity, this.currentRelativeHumidity);	
-	await sensor.close()
+	sensor.close()
 /*  
     dhtSensor.read(this.dhtSensorType, this.temperatureSensorPin, (err, temperature, humidity) => {
       if (!err) {
