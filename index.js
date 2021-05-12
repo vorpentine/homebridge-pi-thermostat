@@ -187,7 +187,7 @@ class Thermostat {
   }
 
   readTemperatureFromSensor() {
-	const sensor = await bmp180({
+	const sensor = bmp180({
 		address: 0x77,
 		mode: 1,
 	})
